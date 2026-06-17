@@ -1,0 +1,11 @@
+# Netlify configuration.
+#
+# Netlify's secret scanner fails the build when it finds an env-var *value* in
+# the build output. Two of our vars trip it as false positives:
+#   - NEXTAUTH_URL: a public URL that next-auth intentionally inlines into the
+#     build output (it's not a secret).
+#   - NEXTAUTH_SECRET: only read server-side at runtime, so its value never
+#     reaches the build output.
+# We exclude just these two keys from the scan; every other key is still scanned.
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "NEXTAUTH_SECRET,NEXTAUTH_URL"
